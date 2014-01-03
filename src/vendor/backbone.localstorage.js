@@ -2,6 +2,7 @@
  * Backbone localStorage Adapter
  * Version 1.1.0
  *
+ * 
  * https://github.com/jeromegn/Backbone.localStorage
  */
 (function (root, factory) {
