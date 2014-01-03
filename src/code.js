@@ -1,7 +1,7 @@
  (function($) {
 
         window.Post = Backbone.Model.extend({
-
+            
             defaults : {
                 id : "???",
                 title : "hello php",
@@ -10,7 +10,7 @@
             },
 
             initialize : function Doc() {
-                console.log('Doc Constructor');
+                console.log('Post Constructor');
             
                 this.bind("invalid", function(model, error){
                     console.log( error );
@@ -20,6 +20,10 @@
             validate: function( attributes ){
                 if( attributes.title === '') {
                     return "Le titre du document ne peut pas être vide !!!";
+                }
+                
+                if( attributes.code === '') {
+                    return "Le code ne peut pas être vide !!!";
                 }
             },
             
@@ -52,5 +56,15 @@
             }
         });
 
+
+        window.Posts = Backbone.Collection.extend({
+            model : Post,
+            
+            localStorage : new Store("posts"),
+            
+            initialize : function() {
+                console.log('Post collection Constructor');
+            }
+        });
 
  })(jQuery);
