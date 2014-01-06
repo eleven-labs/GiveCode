@@ -141,6 +141,39 @@
         }
 
     });
+    
+    window.PostsRouter = Backbone.Router.extend({
+
+        initialize : function() {
+            /* 1- Création d'une collection */
+            this.posts = new Posts();
+            /* 2- Chargement de la collection */
+            this.posts.fetch();
+
+            /* 3- Création des vues + affichage */
+            this.postFormView = new PostFormView({ collection : this.posts });
+            this.postsView = new PostsCollectionView({ collection : this.posts });
+            this.postsView.render();
+
+            /* 4- Click sur un lien */
+            this.route("post/:id", "post", function(id){
+                pv = new PostView({model:  this.posts.get(id)});
+                pv.render();
+               
+            });
+            
+            
+        },
+        
+        routes : {
+            "" : "root",
+            "about" : "about"
+        },
+
+        root : function() { console.log('Vous êtes à la racine');},
+        about : function() { console.log('A propos : ceci est un tutorial BackBone');}
+
+    });
 
 
  })(jQuery);

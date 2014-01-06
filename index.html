@@ -24,7 +24,7 @@
         <script type="text/template" id="posts-collection-template">
         <ol>
           <% _.each(posts, function(post) { %>
-            <li><%= post.id %> : <%= post.title %></li>
+            <li><a href="#post/<%= post.id %>"><%= post.id %></a>: <%= post.title %></li>
           <% }); %>
         </ol>
     </script>
@@ -54,17 +54,12 @@
 <script src="src/code.js"></script>
 
 <script>
-    p = new Post();
-    p2 = new Post();
-    p2.setId(45);
-    p2.setTitle("seconde");
-    pv = new PostView({model: p});
-    pv.render();
+    router = new PostsRouter();
     posts = new Posts();
     posts.fetch();
-    posts.add([p, p2]);
     ppv = new PostsCollectionView({collection: posts})
     ppv.render()
     postFormView = new PostFormView({ collection : posts });
+    Backbone.history.start();
 </script>
 </html>
