@@ -1,7 +1,7 @@
  (function($) {
 
         window.Post = Backbone.Model.extend({
-
+            
             defaults : {
                 id : "???",
                 title : "hello php",
@@ -10,7 +10,7 @@
             },
 
             initialize : function Doc() {
-                console.log('Doc Constructor');
+                console.log('Post Constructor');
             
                 this.bind("invalid", function(model, error){
                     console.log( error );
@@ -20,6 +20,10 @@
             validate: function( attributes ){
                 if( attributes.title === '') {
                     return "Le titre du document ne peut pas être vide !!!";
+                }
+                
+                if( attributes.code === '') {
+                    return "Le code ne peut pas être vide !!!";
                 }
             },
             
@@ -51,6 +55,92 @@
                 this.set({ keywords : value });
             }
         });
+
+
+        window.Posts = Backbone.Collection.extend({
+            model : Post,
+            
+              localStorage : new Store("posts"),
+              
+            initialize : function() {
+                console.log('Post collection Constructor');
+            }
+        });
+        
+        window.PostView = Backbone.View.extend({
+            el : $('#post-container'),
+            initialize : function() {
+                this.template = _.template($('#post-template').html());
+                
+                 /*--- binding ---*/
+                _.bindAll(this, 'render');
+                this.model.bind('change', this.render);
+                /*---------------*/
+            },
+    
+            setModel : function(model) {
+            this.model = model;
+            return this;
+            },
+            
+            render : function() {
+                var renderedContent = this.template(this.model.toJSON());
+                $(this.el).html(renderedContent);
+                return this;
+            }
+
+        });
+        
+        window.PostsCollectionView = Backbone.View.extend({
+        el : $('#posts-collection-container'),
+
+        initialize : function() {
+            this.template = _.template($('#posts-collection-template').html());
+
+            /*--- binding ---*/
+            _.bindAll(this, 'render');
+            this.collection.bind('change', this.render);
+            this.collection.bind('add', this.render);
+            this.collection.bind('remove', this.render);
+            /*---------------*/
+
+        },
+
+        render : function() {
+            var renderedContent = this.template({ posts : this.collection.toJSON() });
+            $(this.el).html(renderedContent);
+            return this;
+        }
+
+    });
+
+    window.PostFormView = Backbone.View.extend({
+        el : $('#post-form-container'),
+
+        initialize : function() {
+            //Nothing to do now
+        },
+        events : {
+            'submit form' : 'addPost'
+        },
+        addPost : function(e) {
+            e.preventDefault();
+
+            this.collection.add({
+                id : this.$('.id').val(),
+                title : this.$('.title').val(),
+                code : this.$('.code').val(),
+                keywords : this.$('.keywords').val()
+            }, { error : _.bind(this.error, this) });
+            this.collection.get(this.$('.id').val()).save();
+            this.$('input[type="text"]').val(''); //on vide le form
+        },
+        error : function(model, error) {
+            console.log(model, error);
+            return this;
+        }
+
+    });
 
 
  })(jQuery);

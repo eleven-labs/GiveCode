@@ -5,12 +5,66 @@
     <script src="src/vendor/jquery.js"></script>
     <script src="src/vendor/underscore.js"></script>
     <script src="src/vendor/backbone.js"></script>
-    <script src="src/code.js"></script>
+     <script src="src/vendor/storage.js"></script>
+    
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+        <script type="text/template" id="post-template">
+            <span><%= id %></span>
+            <span><%= title %></span>
+            <span><%= code %></span>
+            <span><%= keywords %></span>
+        </script>
+
+
+        <div id='post-container'></div>
+        
+        <script type="text/template" id="posts-collection-template">
+        <ol>
+          <% _.each(posts, function(post) { %>
+            <li><%= post.id %> : <%= post.title %></li>
+          <% }); %>
+        </ol>
+    </script>
+
+    <div id='posts-collection-container'></div>
+
+
+    <div id="post-form-container">
+            <form action="/">
+                <p>
+                    <input type="text" class="id" placeholder="Identifiant"/>
+                </p>
+                <p>
+                    <input type="text" class="title" placeholder="Titre"/>
+                </p>
+                <p>
+                    <input type="text" class="code" placeholder="Texte"/>
+                </p>
+                <p>
+                    <input type="text" class="keywords" placeholder="Mots Clés"/>
+                </p>
+                <input type="submit" class="submit" value="Ajouter Post" />
+            </form>
+        </div>
 
 </body>
+<script src="src/code.js"></script>
 
+<script>
+    p = new Post();
+    p2 = new Post();
+    p2.setId(45);
+    p2.setTitle("seconde");
+    pv = new PostView({model: p});
+    pv.render();
+    posts = new Posts();
+    posts.fetch();
+    posts.add([p, p2]);
+    ppv = new PostsCollectionView({collection: posts})
+    ppv.render()
+    postFormView = new PostFormView({ collection : posts });
+</script>
 </html>
