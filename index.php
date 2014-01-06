@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC>
 <html>
 <head>
     <title>Give Code</title>
@@ -11,6 +10,8 @@
 </head>
 <body>
 
+<?php require_once('model.php')?>
+<?php require_once('collection.php')?>
 </body>
 
 </html>
